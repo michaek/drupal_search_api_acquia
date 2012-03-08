@@ -1,0 +1,40 @@
+<?php 
+
+require_once 'includes/acquia_search.utility.inc';
+
+/**
+ * Implements hook_search_api_service_info().
+ */
+function search_api_acquia_search_api_service_info() {
+  $services['search_api_acquia_service'] = array(
+    'name' => t('Acquia service'),
+    'description' => t('<p>Index items using Acquia\'s Apache Solr search server.</p>' .
+        '<ul>' . '<li>All field types are supported and indexed in a special way, with URI/String and Integer/Duration being equivalent.</li>' .
+        '<li>See <a href="@url">the Solr wiki</a> for information about the "direct" parse mode.</li>' .
+        '<li>Supports the search_api_facets and search_api_multi features.</li>' .
+        '<li>Will use internal Solr preprocessors, so Search API preprocessors should for the most part be deactivated.</li>' .
+        '<li>See the README.txt file provided with this module for details.</li>' . '</ul>',
+        array('@url' => url('http://wiki.apache.org/solr/SolrQuerySyntax'))),
+    'class' => 'SearchApiAcquiaService',
+  );
+  return $services;
+}
+
+/**
+ * Generate auth cookie and nonce for validation, exctracted from AcquiaSearchService::prepareRequest().
+ */
+function _search_api_acquia_auth_cookie($url) {
+  $id = uniqid();
+  if (!stristr($url,'?')) {
+    $url .= "?";
+  }
+  else {
+    $url .= "&";
+  }
+  $url .= 'request_id=' . $id;
+  list($cookie, $nonce) = acquia_search_auth_cookie($url);
+  if (empty($cookie)) {
+    throw new Exception('Invalid authentication string - subscription keys expired or missing.');
+  }
+  return array($cookie, $nonce);
+}
