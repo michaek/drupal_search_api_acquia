@@ -5,7 +5,7 @@ dependencies[] = acquia_agent
 core = 7.x
 package = Search
 version = "7.x-1.x-dev"
-projuect = "search_api_acquia"
+project = "search_api_acquia"
 
 files[] = service.inc
 files[] = includes/acquia_connection.inc
