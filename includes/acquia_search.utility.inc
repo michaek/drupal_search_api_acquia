@@ -9,7 +9,7 @@
  * In case we've enabled the acquia_search module - which we shouldn't -
  * don't cause a fatal error by defining these functions twice.
  */
-if (!function_exists('acquia_search_auth_cookie')) {
+if (!module_exists('acquia_search') && !function_exists('acquia_search_auth_cookie')) {
 
   /**
    * Modify a solr base url and construct a hmac authenticator cookie.
