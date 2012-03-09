@@ -23,7 +23,7 @@ function search_api_acquia_search_api_service_info() {
 /**
  * Generate auth cookie and nonce for validation, exctracted from AcquiaSearchService::prepareRequest().
  */
-function _search_api_acquia_auth_cookie($url) {
+function _search_api_acquia_auth_cookie(&$url) {
   $id = uniqid();
   if (!stristr($url,'?')) {
     $url .= "?";

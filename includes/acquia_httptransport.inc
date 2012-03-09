@@ -23,6 +23,8 @@ class SearchApiAcquiaHttpTransport extends SearchApiSolrHttpTransport {
 
     list($cookie, $nonce) = _search_api_acquia_auth_cookie($url);
     $options['headers']['Cookie'] = $cookie;
+    // Spoof Acquia Search user agent?
+    // $options['headers'] += array('User-Agent' => 'acquia_search/'. variable_get('acquia_search_version', '7.x'));
     
     if ($this->http_auth) {
       $options['headers']['Authorization'] = $this->http_auth;
@@ -36,6 +38,8 @@ class SearchApiAcquiaHttpTransport extends SearchApiSolrHttpTransport {
     if ($contentType) {
       $options['headers']['Content-Type'] = $contentType;
     }
+
+    $options['context'] = acquia_agent_stream_context_create($url, 'acquia_search');
 
     $response = drupal_http_request($url, $options);
 
